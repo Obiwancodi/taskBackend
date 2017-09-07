@@ -2,5 +2,6 @@
 node_modules
 jspm_packages
 config
+.gitignore
 # Serverless directories
 .serverless
