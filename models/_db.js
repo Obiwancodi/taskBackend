@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
-const db = new Sequelize('taskdb','Administrator', 'JorgeLopez67.',{
+const config = require('../config')
+const db = new Sequelize(config.tableName, config.userName, config.password,{
     host: 'taskdb.cpw46tuovq7f.us-east-2.rds.amazonaws.com',
     port: '5432',
     dialect: 'postgres',

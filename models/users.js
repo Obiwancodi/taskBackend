@@ -16,15 +16,17 @@ const User = db.define('users', {
 		type: Sequelize.STRING,
 		allowNull: false,
 		unique: true
-	}
+	},
 	userID: {
 		type: Sequelize.STRING
 	},
 	currentExp: {
-		type: Sequelize.INTEGER
-	}
+		type: Sequelize.INTEGER,
+		defaultValue: 0
+	},
 	totalExp: {
-		type: Sequelize.INTEGER
+		type: Sequelize.INTEGER,
+		defaultValue: 0
 	}
 });
 
