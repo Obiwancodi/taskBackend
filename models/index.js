@@ -1,15 +1,17 @@
 const db = require('./_db');
-const user =require('./users');
-const task = require('./tasks');
-const reward = require('./rewards');
-const streak = require('./streaks');
+const User =require('./users');
+const Task = require('./tasks');
+const Reward = require('./rewards');
+const Streak = require('./streaks');
 
+Task.belongsTo(User,{as: "goalDoer"});
+Task.belongsTo(User,{as: "assigner"});
 
 
 module.exports = {
   db: db,
-  User: user,
-  Task: task,
-  Reward: reward,
-  Streak: streak
+  User: User,
+  Task: Task,
+  Reward: Reward,
+  Streak: Streak
 };
