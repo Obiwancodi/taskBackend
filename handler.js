@@ -1,31 +1,179 @@
 'use strict';
-
+const Promise = require("bluebird");
 const models = require('./models');
-module.exports.hello = (event, context, callback) => {
-  context.callbackWaitsForEmptyEventLoop = false; 
+
+// Reset the datbase!
+
+module.exports.reset = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
   models.db.sync({force:true})
-  .then((test) => {
-    return models.Streak.create({
-      title: event.title,
-      description: event.description,
-      points: event.points,
-      counter: event.counter
-    })
+  .then((reset) => {
+    callback(null, 200)
   })
-  .then((streak) => {
-    return streak.finished()
+  .catch((err) => {
+    callback(err)
   })
-  .then((streak) => {
-    return models.Streak.findOne({
-      where:{
-        id: 1
-      }
-    })
-  })
-  .then((streak) => {
-    callback(null, streak)
+}
+
+// Users Endpoints!
+
+module.exports.getUsers = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  models.User.findAll({})
+  .then((users) => {
+    callback(null,users)
   })
   .catch((err) => {
     callback(err)
   })
 };
+
+module.exports.getUser = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  models.User.findOne({
+    where: {
+      id: event.id
+    },
+    include: [{all:true}]
+  })
+  .then((user) => {
+    callback(null,user)
+  })
+  .catch((err) => {
+    callback(err)
+  })
+}
+
+module.exports.createUser = (event,context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+    models.User.create({
+      username: event.username,
+      email: event.email,
+      password: event.password
+
+    })
+  .then((user) => {
+    callback(null, 200)
+  })
+  .catch((err) => {
+    callback(err)
+  })
+}
+
+module.exports.updateUser = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  models.User.update(event, {
+    where: {
+      userID: event.id
+    }
+  })
+  .then((user) => {
+    callback(null, 200)
+  })
+  .catch((err) => {
+    callback(err)
+  })
+}
+
+module.exports.deleteUser = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  models.User.destroy({
+    where: {
+      userID: event.id
+    }
+  })
+  .then((user) => {
+    callback(null, 202)
+  })
+  .catch((err) => {
+    callback(err)
+  })
+}
+
+// Reward Enpoints!
+
+module.exports.getReward = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  models.Reward.findOne({
+    where: {
+      id: event.id
+    }
+  })
+  .then((reward) => {
+    callback(null, reward)
+  })
+  .catch((err) => {
+    callback(err)
+  })
+}
+
+module.exports.createReward = (event,context,callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  models.Reward.create({
+    title: event.title,
+    description: event.description,
+    points: event.points
+  })
+  .then((reward) => {
+    callback(null, 200)
+  })
+  .catch((err) => {
+    callback(err)
+  })
+}
+
+module.exports.updateReward = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  models.Reward.update(event,{
+    where: {
+      id: event.id
+    }
+  })
+  .then((reward) => {
+    callback(null, 200)
+  })
+  .catch((err) => {
+    callback(err)
+  })
+}
+
+module.exports.deleteReward = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  models.Reward.destroy({
+    where: {
+      id: event.id
+    }
+  })
+  .then((reward) => {
+    callback(null, 200)
+  })
+  .catch((err) => {
+    callback(err)
+  })
+}
+
+// Tasks Enpoints!
+
+// module.exports.getTask = (event, context, callback) => {
+//   context.callbackWaitsForEmptyEventLoop = false;
+//     models.Task.
+// }
+
+// module.exports.createTask = (event, context, callback) => {
+//   context.callbackWaitsForEmptyEventLoop = false;
+//   models.Task.create({
+//     title: event.title,
+//     description: event.description,
+//     dueDate: event.dueDate,
+//     points: event.points
+//   })
+//   .then((task) => {
+//     return User.findOne({where: {userID: event.userID}})
+//   })
+//   .then((user) => {
+//     return task.setUser(user)
+//   })
+//   .then((task) => {
+
+//   })
+// }

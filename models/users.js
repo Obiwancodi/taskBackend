@@ -17,9 +17,6 @@ const User = db.define('users', {
 		allowNull: false,
 		unique: true
 	},
-	userID: {
-		type: Sequelize.STRING
-	},
 	currentExp: {
 		type: Sequelize.INTEGER,
 		defaultValue: 0

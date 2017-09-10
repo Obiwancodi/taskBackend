@@ -55,13 +55,69 @@ provider:
 #    - exclude-me-dir/**
 
 functions:
-  hello:
-    handler: handler.hello
+  #Reset database
+  reset:
+    handler: handler.reset
     events:
       - http:
-         path: /
-         method: get
-
+          path: /reset
+          method: get
+  #Users
+  getUsers:
+    handler: handler.getUsers
+    events:
+      - http:
+          path: /manyusers
+          method: get
+  getUser:
+    handler: handler.getUser
+    events:
+      - http:
+          path: /user
+          method: get                 
+  createUser:
+    handler: handler.createUser
+    events:
+      - http:
+          path: /user
+          method: post
+  updateUser:
+    handler: handler.updateUser
+    events:
+      - http:
+          path: /user
+          method: put
+  deleteUser:
+    handler: handler.deleteUser
+    events:
+      - http:
+          path: /user
+          method: delete
+  #Rewards
+  getReward:
+    handler: handler.getReward
+    events:
+      - http:
+          path: /reward
+          method: get
+  createReward:
+    handler: handler.createReward
+    events:
+      - http:
+          path: /reward
+          method: post
+  updateReward:
+    handler: handler.updateReward
+    events:
+      - http:
+          path: /reward
+          method: put
+  deleteReward:
+    handler: handler.deleteReward
+    events:
+      - http:
+          path: /reward
+          method: delete                    
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
