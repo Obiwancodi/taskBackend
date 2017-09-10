@@ -154,26 +154,52 @@ module.exports.deleteReward = (event, context, callback) => {
 
 // Tasks Enpoints!
 
-// module.exports.getTask = (event, context, callback) => {
-//   context.callbackWaitsForEmptyEventLoop = false;
-//     models.Task.
-// }
+module.exports.getTask = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+    models.Task.findOne({
+      where: {
+        id: event.id
+      },
+      include: [{all: true}]
+    })
+    .then((task) => {
+      callback(null, task)
+    })
+    .catch((err) => {
+      callback(err)
+    })
+}
 
-// module.exports.createTask = (event, context, callback) => {
-//   context.callbackWaitsForEmptyEventLoop = false;
-//   models.Task.create({
-//     title: event.title,
-//     description: event.description,
-//     dueDate: event.dueDate,
-//     points: event.points
-//   })
-//   .then((task) => {
-//     return User.findOne({where: {userID: event.userID}})
-//   })
-//   .then((user) => {
-//     return task.setUser(user)
-//   })
-//   .then((task) => {
-
-//   })
-// }
+module.exports.createTask = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  models.Task.create({
+    title: event.title,
+    description: event.description,
+    dueDate: event.dueDate,
+    points: event.points
+  })
+  .then((task) => {
+    return models.User.findOne({where: {id: event.userId}})
+    .then((user) => {
+      return task.setPerson(user)
+    })
+    .then((task) => {
+      return models.User.findOne({where: {id: event.assignId}})
+    }) 
+    .then((user) => {
+      return task.setAssigner(user)
+    })
+    .then((user) => {
+      return models.Reward.findOne({where: {id: event.rewardId}})
+    })
+    .then((reward) => {
+      return reward.setTasks([task])
+    })
+  })
+  .then((task) => {
+    callback(null,200)
+  })
+  .catch((err) => {
+    callback(err)
+  })
+}

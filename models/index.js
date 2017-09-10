@@ -4,7 +4,7 @@ const Task = require('./tasks');
 const Reward = require('./rewards');
 const Streak = require('./streaks');
 
-Task.belongsTo(User,{as: "goalDoer"});
+Task.belongsTo(User,{as: "person"});
 Task.belongsTo(User,{as: "assigner"});
 
 Reward.belongsToMany(Task,{through: "rewardToTasks"});

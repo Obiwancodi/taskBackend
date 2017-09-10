@@ -117,7 +117,26 @@ functions:
     events:
       - http:
           path: /reward
-          method: delete                    
+          method: delete
+  #Tasks
+  getTask:
+    handler: handler.getTask
+    events:
+      - http:
+          path: /task
+          method: get
+  createTask:
+    handler: handler.createTask
+    events:
+      - http:
+          path: /task
+          method: post
+  updateTask:
+    handler: handler.updateTask
+    events:
+      - http:
+          path: /task
+          method: put                            
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details

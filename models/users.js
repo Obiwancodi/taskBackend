@@ -14,8 +14,7 @@ const User = db.define('users', {
 	},
 	password: {
 		type: Sequelize.STRING,
-		allowNull: false,
-		unique: true
+		allowNull: false
 	},
 	currentExp: {
 		type: Sequelize.INTEGER,
