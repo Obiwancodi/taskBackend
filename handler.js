@@ -203,3 +203,35 @@ module.exports.createTask = (event, context, callback) => {
     callback(err)
   })
 }
+
+module.exports.updateTask = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  models.Task.update(event,{
+    where: {
+      id: event.id
+    }
+  })
+  .then((task) => {
+    callback(null, 200)
+  })
+  .catch((err) => {
+    callback(err)
+  })
+}
+
+module.exports.deleteTask = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  models.Task.destroy({
+    where: {
+      id: event.id
+    }
+  })
+  .then((task) => {
+    callback(null, 200)
+  })
+  .catch((err) => {
+    callback(err)
+  })
+}
+
+// Streak Tasks Endpoints!

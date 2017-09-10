@@ -136,7 +136,19 @@ functions:
     events:
       - http:
           path: /task
-          method: put                            
+          method: put
+  deleteTask:
+    handler: handler.deleteTask
+    events:
+      - http:
+          path: /task
+          method: delete
+  completeTask:
+    handler: handler.completeTask
+    events:
+      - http:
+          path: /task/complete
+          method: get              
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
