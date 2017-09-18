@@ -6,12 +6,15 @@ const Streak = require('./streaks');
 
 Task.belongsTo(User,{as: "person"});
 Task.belongsTo(User,{as: "assigner"});
+Task.belongsTo(Streak);
+
+Streak.belongsTo(User,{as: "personstr"})
+Streak.belongsTo(User,{as: "assignerstr"})
 
 Reward.belongsToMany(Task,{through: "rewardToTasks"});
 Reward.belongsToMany(User,{through: "rewardToUsers"});
 
-
-Task.belongsTo(Streak);
+Reward.belongsToMany(Streak,{through: "rewardToStreak"});
 
 
 module.exports = {

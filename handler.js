@@ -152,6 +152,23 @@ module.exports.deleteReward = (event, context, callback) => {
   })
 }
 
+module.exports.turnInReward = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  models.Reward.findOne({where: {id: event.id} })
+  .then((reward) => {
+    return models.User.findOne({where: {id: event.userId}})
+    .then((user) => {
+      return reward.addUser(user)
+    })
+  })
+  .then((reward) => {
+    callback(null,reward);
+  })
+  .catch((err) => {
+    callback(err)
+  })
+}
+
 // Tasks Enpoints!
 
 module.exports.getTask = (event, context, callback) => {
@@ -193,8 +210,15 @@ module.exports.createTask = (event, context, callback) => {
       return models.Reward.findOne({where: {id: event.rewardId}})
     })
     .then((reward) => {
-      return reward.setTasks([task])
+      return reward.addTask(task)
     })
+    .then((streak) => {
+      return models.Streak.findOne({where: {id:event.streakId}})
+    })
+    .then((streak) => {
+      return task.setStreak(streak)
+    })
+ 
   })
   .then((task) => {
     callback(null,200)
@@ -235,3 +259,83 @@ module.exports.deleteTask = (event, context, callback) => {
 }
 
 // Streak Tasks Endpoints!
+
+module.exports.getStreak = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  models.Streak.findOne({
+    where: {
+      id: event.id
+    },
+    include: [{all:true}]
+  })
+  .then((streak) => {
+    callback(null, streak)
+  })
+  .catch((err) => {
+    callback(err)
+  })
+}
+
+module.exports.createStreak = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  models.Streak.create({
+    title: event.title,
+    description: event.description,
+    points: event.points,
+    counter: event.counter
+  })
+  .then((streak) => {
+    return models.User.findOne({where: {id: event.userId}})
+    .then((user) => {
+      return streak.setPersonstr(user)
+    })
+    .then((task) => {
+      return models.User.findOne({where: {id: event.assignId}})
+    }) 
+    .then((user) => {
+      return streak.setAssignerstr(user)
+    })
+    .then((user) => {
+      return models.Reward.findOne({where: {id: event.rewardId}})
+    })
+    .then((reward) => {
+      return reward.addStreak(streak);
+    })
+  })
+  .then((streak) => {
+    callback(null,200)
+  })
+  .catch((err) => {
+    callback(err)
+  })
+}
+
+module.exports.updateStreak = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  models.Streak.update(event, {
+    where: {
+      id: event.id
+    }
+  })
+  .then((streak) => {
+    callback(null, 200)
+  })
+  .catch((err) => {
+    callback(err)
+  })
+}
+
+module.exports.deleteStreak = (event, context, callback) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  models.Streak.destroy({
+    where: {
+      id: event.id
+    }
+  })
+  .then((streak) => {
+    callback(null,200)
+  })
+  .catch((err) => {
+    callback(err)
+  })
+}

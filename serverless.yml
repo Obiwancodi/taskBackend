@@ -118,6 +118,12 @@ functions:
       - http:
           path: /reward
           method: delete
+  turnInReward:
+    handler: handler.turnInReward
+    events:
+      - http:
+          path: /turnIn
+          method: post        
   #Tasks
   getTask:
     handler: handler.getTask
@@ -143,12 +149,31 @@ functions:
       - http:
           path: /task
           method: delete
-  completeTask:
-    handler: handler.completeTask
+  #Streaks
+  getStreak:
+    handler: handler.getStreak
     events:
       - http:
-          path: /task/complete
-          method: get              
+          path: /streak
+          method: get
+  createStreak:
+    handler: handler.createStreak
+    events:
+      - http:
+          path: /streak
+          method: post
+  updateStreak:
+    handler: handler.updateStreak
+    events:
+      - http:
+          path: /streak
+          method: put
+  deleteStreak:
+    handler: handler.deleteStreak
+    events:
+      - http:
+          path: /streak
+          method: delete                              
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
