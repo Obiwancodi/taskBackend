@@ -160,6 +160,17 @@ module.exports.turnInReward = (event, context, callback) => {
     .then((user) => {
       return reward.addUser(user)
     })
+    .then((reward) => {
+      return models.User.findOne({where: {id:event.userId}})
+    })
+    .then((user) => {
+      return models.User.update({
+        currentExp: reward.points + user.currentExp,
+        totalExp: reward.points + user.totalExp
+      },{
+        where: {id: event.userId}
+      })
+    })
   })
   .then((reward) => {
     callback(null,reward);
